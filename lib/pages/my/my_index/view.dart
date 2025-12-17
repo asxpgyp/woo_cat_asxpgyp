@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:ducafe_ui_core/ducafe_ui_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:woo_2025_cat/common/index.dart';
 
@@ -47,6 +48,8 @@ class MyIndexPage extends GetView<MyIndexController> {
       stretch: true,
       // 高度
       expandedHeight: 310.h,
+      // ↓↓↓ 关键：让 iOS 状态栏内容变黑 ↓↓↓
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       // 此小组件堆叠在工具栏和选项卡栏后面。其高度将与应用栏的整体高度相同。
       flexibleSpace: FlexibleSpaceBar(
         // // // 折叠模式
@@ -125,7 +128,7 @@ class MyIndexPage extends GetView<MyIndexController> {
                 .card(color: context.colors.scheme.surface)
                 .paddingHorizontal(AppSpace.page),
           ].toColumn(mainAxisAlignment: MainAxisAlignment.spaceEvenly),
-        ].toStack().safeArea(),
+        ].toStack(),
       ),
     );
   }
