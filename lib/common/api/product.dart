@@ -1,0 +1,76 @@
+import 'package:woo_2025_cat/common/services/wp_http.dart';
+
+import '../index.dart';
+
+/// 商品 api
+class ProductApi {
+  /// 分类列表
+  static Future<List<CategoryModel>> categories() async {
+    var res = await WPHttpService.to.get('/products/categories');
+
+    List<CategoryModel> categories = [];
+    for (int i = 0; i < res.data.length; i++) {
+      categories.add(CategoryModel.fromJson(res.data[i]));
+    }
+    // 排序 menuOrder , 小号在前
+    categories.sort((a, b) => a.menuOrder!.compareTo(b.menuOrder!));
+    return categories;
+  }
+
+  /// 商品列表
+  static Future<List<ProductModel>> products(ProductsReq? req) async {
+    var res = await WPHttpService.to.get('/products', params: req?.toJson());
+
+    List<ProductModel> products = [];
+    for (int i = 0; i < res.data.length; i++) {
+      products.add(ProductModel.fromJson(res.data[i]));
+    }
+    return products;
+  }
+
+  /// 商品详情
+  static Future<ProductModel> productDetail(int? id) async {
+    var res = await WPHttpService.to.get('/products/$id');
+    return ProductModel.fromJson(res.data);
+  }
+
+  /// 属性列表
+  /// id 1 颜色 2 尺寸
+  static Future<List<AttributeModel>> attributes(int id) async {
+    var res = await WPHttpService.to.get('/products/attributes/$id/terms');
+    List<AttributeModel> attributes = [];
+    for (var item in res.data) {
+      attributes.add(AttributeModel.fromJson(item));
+    }
+    // 排序 menuOrder , 小号在前
+    attributes.sort((a, b) => a.menuOrder!.compareTo(b.menuOrder as int));
+    return attributes;
+  }
+
+  /// 评论列表
+  static Future<List<ReviewModel>> reviews(ReviewsReq? req) async {
+    var res = await WPHttpService.to.get(
+      '/products/reviews',
+      params: req?.toJson(),
+    );
+
+    List<ReviewModel> reviews = [];
+    for (var item in res.data) {
+      reviews.add(ReviewModel.fromJson(item));
+    }
+    return reviews;
+  }
+
+  /// tags 列表
+  static Future<List<TagsModel>> tags(TagsReq? req) async {
+    var res = await WPHttpService.to.get(
+      '/products/tags',
+      params: req?.toJson(),
+    );
+    List<TagsModel> tags = [];
+    for (var item in res.data) {
+      tags.add(TagsModel.fromJson(item));
+    }
+    return tags;
+  }
+}
